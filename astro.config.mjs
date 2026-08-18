@@ -9,7 +9,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://porfolio-agustin-tau.vercel.app/',
+  site: 'https://porfolio-agustin-weld.vercel.app',
   vite: {
     plugins: [tailwindcss()]
   },

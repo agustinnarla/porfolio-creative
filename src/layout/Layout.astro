@@ -1,9 +1,10 @@
 ---
+import Analytics  from '@vercel/analytics/astro'
 import '../styles/global.css'
 
 const siteTitle = "Agustín Arla | Analista Funcional & Desarrollador Full Stack"
 const siteDescription = "Portfolio de Agustín Arla - Analista Funcional y Desarrollador Full Stack en Córdoba, Argentina. Especializado en React Native, Node.js, PostgreSQL y ciberseguridad."
-const siteUrl = "https://agustinarla.dev"
+const siteUrl = "https://porfolio-agustin-weld.vercel.app"
 const siteImage = "/images/agusblanco.webp"
 ---
 
@@ -37,7 +38,7 @@ const siteImage = "/images/agusblanco.webp"
 				"@context": "https://schema.org",
 				"@type": "Person",
 				"name": "Agustín Arla",
-				"url": "https://porfolio-agustin-tau.vercel.app/",
+				"url": "https://porfolio-agustin-weld.vercel.app",
 				"jobTitle": "Analista Funcional & Desarrollador Full Stack",
 				"address": {
 					"@type": "PostalAddress",
@@ -62,5 +63,6 @@ const siteImage = "/images/agusblanco.webp"
 	</head>
 	<body>
 		<slot />
+		<Analytics />
 	</body>
 </html>

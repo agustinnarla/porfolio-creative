@@ -1,0 +1,162 @@
+---
+import { Icon } from "astro-icon/components";
+
+const project = [
+    {
+        id: 1,
+        tipe: "Full Stack",
+        title: "Gestión Nuestra Señora del Huerto",
+        details: "Gestión académica",
+        description:
+            "Plataforma omnicanal para la digitalización de instituciones educativas. Eliminación total del uso de papel con módulos de asistencia, amonestaciones, notas y observaciones en tiempo real.",
+        technologies: ["React Native", "Node.js", "Express", "PostgreSQL"],
+        github: "https://github.com/agustinnarla/GestionColegio",
+        demo: "https://youtu.be/1ia6A2C0qoc"
+    },
+    {
+        id: 2,
+        tipe: "LandingPage",
+        title: "Tha Vibbes Company",
+        details: "Grupo de baile",
+        description:
+            "Landing page oficial para crew de danza urbana de Córdoba, representantes de Argentina en el mundial de Hip Hop International 2026. Estética de alto impacto visual y cultura urbana.",
+        technologies: ["Astro", "Tailwind CSS"],
+        github: "https://github.com/agustinnarla/ThaVibbesCompany",
+        demo: "https://tha-vibbes-company.vercel.app/"
+    },
+    {
+        id: 3,
+        tipe: "App Móvil",
+        title: "Indarra",
+        details: "Aplicación para rutinas del gimnasio",
+        description:
+            "Aplicación móvil para seguimiento personalizado de rutinas de ejercicio. Módulo avanzado de analítica para registrar progreso y evaluar evolución de cargas.",
+        technologies: ["React Native", "Node.js", "Express", "PostgreSQL"],
+        github: "https://github.com/agustinnarla/Indarra.git",
+        demo: "https://youtube.com/shorts/h_xxbB0ZyPU"
+    }
+]
+---
+
+<section
+    data-trigger-project
+    class="relative col-span-1 row-span-auto
+        min-h-[400px]
+        overflow-hidden rounded-xl border bg-white p-4
+
+        sm:col-span-2 sm:min-h-[500px] sm:p-5
+
+        lg:col-span-4 lg:row-span-9
+        lg:min-h-0 lg:p-8"
+>
+    <div class="absolute left-8 top-8 z-50">
+        <span class="font-[Story] text-4xl text-cyan-700">
+            02.
+        </span>
+    </div>
+
+    <div
+        data-project-stack
+        class="relative flex h-full w-full items-center justify-center"
+    >
+        {
+            project.map((items) => (
+                <article
+                    data-project-card
+                    class="absolute h-[70%] w-[85%] cursor-pointer rounded-2xl bg-cyan-400 p-6 shadow-xl"
+                >
+                    <div class="flex items-center justify-between">
+                        <span class="font-[Story] text-2xl">
+                            0{items.id}.
+                        </span>
+
+                        <span class="font-[Story] text-sm">
+                            {items.tipe}
+                        </span>
+
+                        <button
+                            type="button"
+                            data-project-detail
+                            data-project-id={items.id}
+                            data-project-type={items.tipe}
+                            data-project-title={items.title}
+                            data-project-description={items.description}
+                            data-project-technologies={items.technologies.join(",")}
+                            data-project-github={items.github}
+                            data-project-demo={items.demo}
+                            class="font-[Story] text-sm transition-all hover:text-2xl hover:text-white hover:scale-105 hover:font-semibold cursor-pointer rotate-2 duration-300 "
+                        >
+                            Ver detalle
+                        </button>
+                    </div>
+
+                    <div class="absolute bottom-6 left-6">
+                        <h2 class="font-[Story] text-4xl">
+                            {items.title}
+                        </h2>
+
+                        <p class="mt-2 opacity-70">
+                            {items.details}
+                        </p>
+                    </div>
+                </article>
+            ))
+        }
+    </div>
+
+  
+    <div
+        data-project-modal
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/50 p-6"
+    >
+        <div
+            data-project-modal-content
+            class="relative w-full max-w-2xl rounded-2xl bg-white p-8"
+        >
+            <button
+                type="button"
+                data-project-modal-close
+                class="absolute right-6 top-6 text-2xl transform-content hover:rotate-12 duration-200 cursor-pointer"
+            >
+                ×
+            </button>
+
+
+            <span
+                data-modal-type
+                class="font-[Story] text-sm text-cyan-700"
+            ></span>
+
+            <h2
+                data-modal-title
+                class="mt-4 font-[Story] text-3xl sm:text-5xl"
+            ></h2>
+
+            <p
+                data-modal-description
+                class="mt-6 text-sm text-gray-600 sm:text-base"
+            ></p>
+
+            <div
+                data-modal-technologies
+                class="mt-6 flex flex-wrap gap-2"
+            ></div>
+
+            <div class="mt-6 flex flex-wrap gap-4">
+                <a data-modal-github href="#" target="_blank">
+                    <Icon name="simple-icons:github" size={24} class="transition-colors hover:text-cyan-950 duration-500"/>
+                </a>
+                <a data-modal-demo href="#" target="_blank">
+                    <Icon name="simple-icons:linkedin" size={24} class="transition-colors hover:text-cyan-950 duration-500"/> 
+                </a>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    import projectAnimation from "../script/project.js"
+
+    projectAnimation()
+</script>

@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: url('/fonts/RobotoCondensed-VariableFont_wght.ttf') 
+  format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Story';
+  src: url('/fonts/StoryScript-Regular.ttf') 
+  format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+
+body{
+    margin:0;
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: #f8f8f6;
+    background-image: radial-gradient(#b8b8b8 1px, transparent 1px);
+    background-size: 24px 24px
+}
+
+[data-trigger-about],
+[data-trigger-skills],
+[data-trigger-contact],
+[data-trigger-cv],
+[data-trigger-project] {
+    will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+

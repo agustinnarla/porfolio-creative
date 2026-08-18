@@ -1,0 +1,45 @@
+---
+import { Icon } from "astro-icon/components";
+import { Mail } from '@lucide/astro'
+---
+<section
+    data-trigger-contact
+    class="col-span-1 row-span-auto rounded-xl border bg-white p-6 sm:col-span-2 sm:p-8 lg:col-span-4 lg:row-span-3"
+>
+    <span class="text-3xl font-[Story] text-cyan-700 sm:text-4xl">
+        04.
+    </span>
+    <div class="flex flex-row items-center justify-end gap-6 sm:gap-8">
+        <a href="https://github.com/agustinnarla" target="_blank" rel="noopener noreferrer" class="p-2 -m-2 rounded-lg">
+            <Icon name="simple-icons:github" size={33} class="transition-colors hover:text-cyan-950 duration-500"/>
+        </a>
+        <a href="https://www.linkedin.com/in/agustinarla/" target="_blank" rel="noopener noreferrer" class="p-2 -m-2 rounded-lg">
+            <Icon name="simple-icons:linkedin" size={33} class="transition-colors hover:text-cyan-950 duration-500"/>
+        </a>
+        <button data-trigger-mail
+            data-copy-email
+            type="button"
+            class="cursor-pointer p-2 -m-2 rounded-lg">
+            <Mail size={33} class="transition-colors hover:text-cyan-950 duration-500"/>
+        </button>
+    </div>
+</section>
+
+<script>
+		import contactAnimation from "../script/contact";
+		contactAnimation()
+
+        const $mail = document.querySelector("[data-copy-email]")
+
+        $mail?.addEventListener("click", async () => {
+            const email = "arlaagustin1@gmail.com"
+
+            try{
+                await navigator.clipboard.writeText(email)
+                alert("Email copiado")
+            }
+            catch(error){
+                console.error("Error")
+            }
+        })
+</script>

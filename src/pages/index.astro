@@ -1,17 +1,43 @@
 ---
-
+import Layout from "../layout/Layout.astro"
+import Loading from "../components/Loading.astro"
+import About from "../components/About.astro"
+import Contact from "../components/Contact.astro"
+import Project from "../components/Project.astro"
+import Skills from "../components/Skills.astro"
+import CV from "../components/CV.astro"
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+
+<Layout>
+    <Loading />
+
+    <div
+        data-trigger-main
+        class="flex min-h-screen items-center px-4 py-6 sm:px-6 lg:px-8"
+    >
+        <main
+            class="
+                mx-auto grid w-full max-w-7xl gap-4
+                grid-cols-1
+                sm:grid-cols-2
+                lg:grid-cols-12 
+				lg:grid-rows-12 
+				lg:gap-6
+                lg:min-h-[800px]
+            "
+        >
+            <About />
+            <Project />
+            <Skills />
+            <Contact />
+            <CV />
+        </main>
+    </div>
+</Layout>
+
+
+<script>
+		import loadingAnimation from "../script/loading";
+		loadingAnimation()
+</script>

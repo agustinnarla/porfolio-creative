@@ -1,0 +1,66 @@
+---
+import '../styles/global.css'
+
+const siteTitle = "Agustín Arla | Analista Funcional & Desarrollador Full Stack"
+const siteDescription = "Portfolio de Agustín Arla - Analista Funcional y Desarrollador Full Stack en Córdoba, Argentina. Especializado en React Native, Node.js, PostgreSQL y ciberseguridad."
+const siteUrl = "https://agustinarla.dev"
+const siteImage = "/images/agusblanco.webp"
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/images/logoAgus.webp" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={siteDescription} />
+		<meta name="robots" content="index, follow" />
+		<link rel="canonical" href={siteUrl} />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={siteUrl} />
+		<meta property="og:title" content={siteTitle} />
+		<meta property="og:description" content={siteDescription} />
+		<meta property="og:image" content={siteImage} />
+		<meta property="og:locale" content="es_AR" />
+
+		
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={siteTitle} />
+		<meta name="twitter:description" content={siteDescription} />
+		<meta name="twitter:image" content={siteImage} />
+
+		<title>{siteTitle}</title>
+
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Person",
+				"name": "Agustín Arla",
+				"url": "https://porfolio-agustin-tau.vercel.app/",
+				"jobTitle": "Analista Funcional & Desarrollador Full Stack",
+				"address": {
+					"@type": "PostalAddress",
+					"addressLocality": "Córdoba",
+					"addressCountry": "AR"
+				},
+				"sameAs": [
+					"https://github.com/agustinnarla",
+					"https://www.linkedin.com/in/agustinarla/"
+				],
+				"knowsAbout": [
+					"React Native",
+					"Node.js",
+					"PostgreSQL",
+					"JavaScript",
+					"Tailwind CSS",
+					"Astro",
+					"Ciberseguridad"
+				]
+			}
+		</script>
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

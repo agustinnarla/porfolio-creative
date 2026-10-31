@@ -12,7 +12,7 @@ function loadingAnimation() {
 
   if (isReducedMotion) {
     gsap.set($screen, { opacity: 0, pointerEvents: "none" });
-    gsap.set($main, { opacity: 1, y: 0 });
+    gsap.set($main, { opacity: 1, clearProps: "transform" });
     return;
   }
 
@@ -37,7 +37,14 @@ function loadingAnimation() {
   .fromTo(
     $main,
     { opacity: 0, y: 20 },
-    { opacity: 1, y: 0, duration: 1, ease: "power3.out" },
+    {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      ease: "power3.out",
+      // Remove the leftover transform so fixed-position modals inside stay relative to the viewport
+      clearProps: "transform",
+    },
     "-=0.3"
   );
 }

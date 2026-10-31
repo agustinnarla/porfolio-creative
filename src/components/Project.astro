@@ -104,8 +104,9 @@ const project = [
             ))
         }
     </div>
+</section>
 
-  
+<!-- Modal lives outside the section: its transform/will-change would otherwise trap position:fixed -->
     <div
         data-project-modal
         class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/50 p-6"
@@ -154,7 +155,6 @@ const project = [
             </div>
         </div>
     </div>
-</section>
 
 <script>
     import projectAnimation from "../script/project.js"

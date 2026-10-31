@@ -5,7 +5,7 @@ import {Video} from "@lucide/astro"
 const project = [
     {
         id: 1,
-        tipe: "Full Stack",
+        type: "Full Stack",
         title: "Gestión Nuestra Señora del Huerto",
         details: "Gestión académica",
         description:
@@ -16,7 +16,7 @@ const project = [
     },
     {
         id: 2,
-        tipe: "LandingPage",
+        type: "LandingPage",
         title: "Tha Vibbes Company",
         details: "Grupo de baile",
         description:
@@ -27,7 +27,7 @@ const project = [
     },
     {
         id: 3,
-        tipe: "App Móvil",
+        type: "App Móvil",
         title: "Indarra",
         details: "Aplicación para rutinas del gimnasio",
         description:
@@ -35,6 +35,18 @@ const project = [
         technologies: ["React Native", "Node.js", "Express", "PostgreSQL"],
         github: "https://github.com/agustinnarla/Indarra.git",
         demo: "https://youtube.com/shorts/h_xxbB0ZyPU"
+    },
+    {
+        id: 4,
+        type: "Full Stack",
+        title: "KaleidoFest",
+        details: "Festival juvenil",
+        description:
+            "Sitio oficial del festival gratuito para chicos de 10 a 14 años en Río Ceballos, con fiesta We Color. Inscripción online con cupo, emails de confirmación con Resend, registro en Google Sheets y validación de acreditaciones desde la API.",
+        technologies: ["Astro", "Tailwind CSS", "GSAP", "TypeScript", "Resend", "Google Sheets API"],
+        // Repo privado: sin link a GitHub
+        github: "",
+        demo: "https://kaleidofest.com.ar/"
     }
 ]
 ---
@@ -72,22 +84,23 @@ const project = [
                         </span>
 
                         <span class="font-[Story] text-sm">
-                            {items.tipe}
+                            {items.type}
                         </span>
 
                         <button
                             type="button"
                             data-project-detail
                             data-project-id={items.id}
-                            data-project-type={items.tipe}
+                            data-project-type={items.type}
                             data-project-title={items.title}
                             data-project-description={items.description}
                             data-project-technologies={items.technologies.join(",")}
                             data-project-github={items.github}
                             data-project-demo={items.demo}
-                            class="font-[Story] text-sm transition-all hover:text-2xl hover:text-white hover:scale-105 hover:font-semibold cursor-pointer rotate-2 duration-300 "
+                            aria-haspopup="dialog"
+                            class="font-[Story] text-sm transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cyan-950 hover:text-2xl hover:text-white hover:scale-105 hover:font-semibold cursor-pointer rotate-2 duration-300 "
                         >
-                            Ver detalle
+                            Ver detalle<span class="sr-only"> de {items.title}</span>
                         </button>
                     </div>
 
@@ -109,6 +122,9 @@ const project = [
 <!-- Modal lives outside the section: its transform/will-change would otherwise trap position:fixed -->
     <div
         data-project-modal
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="project-modal-title"
         class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/50 p-6"
     >
         <div
@@ -118,7 +134,8 @@ const project = [
             <button
                 type="button"
                 data-project-modal-close
-                class="absolute right-6 top-6 text-2xl transform-content hover:rotate-12 duration-200 cursor-pointer"
+                aria-label="Cerrar"
+                class="absolute right-6 top-6 text-2xl hover:rotate-12 duration-200 cursor-pointer"
             >
                 ×
             </button>
@@ -130,6 +147,7 @@ const project = [
             ></span>
 
             <h2
+                id="project-modal-title"
                 data-modal-title
                 class="mt-4 font-[Story] text-3xl sm:text-5xl"
             ></h2>
@@ -145,10 +163,10 @@ const project = [
             ></div>
 
             <div class="mt-6 flex flex-wrap gap-4">
-                <a data-modal-github href="#" target="_blank">
-                    <Icon name="simple-icons:github" size={24} class="transition-colors hover:text-cyan-950 duration-500"/>
+                <a data-modal-github href="#" target="_blank" rel="noopener noreferrer">
+                    <Icon name="simple-icons:github" aria-hidden="true" size={24} class="transition-colors hover:text-cyan-950 duration-500"/>
                 </a>
-                <a data-modal-demo href="#" target="_blank">
+                <a data-modal-demo href="#" target="_blank" rel="noopener noreferrer">
                     <Video  size={24} class="transition-colors hover:text-cyan-950 duration-500"/> 
                 </a>
 

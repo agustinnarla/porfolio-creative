@@ -1,4 +1,5 @@
 import gsap from "gsap"
+import { createModalA11y } from "./modal.js"
 
 const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
 const hasHover = window.matchMedia("(hover: hover)").matches
@@ -21,8 +22,10 @@ function projectAnimation() {
 
     const detailButtons = document.querySelectorAll("[data-project-detail]");
 
-    if (!$section || !cards.length) return
+    if (!$section || !cards.length || !modal) return
 
+    const a11y = createModalA11y(modal, { onClose: closeModal })
+    let isOpen = false
     let stack = [...cards]
 
     if (hasHover) {
@@ -61,52 +64,64 @@ function projectAnimation() {
         })
     }
 
+    function bringToFront(card) {
+        const index = stack.indexOf(card)
+        if (index <= 0) return
+
+        stack.splice(index, 1)
+        stack.unshift(card)
+
+        updateStack()
+
+        gsap.fromTo(
+            card,
+            { x: 120, rotation: 8, scale: 0.9 },
+            { x: 0, rotation: -1, scale: 1, duration: isReducedMotion ? 0 : 0.7, ease: "power3.out", overwrite: "auto" }
+        )
+    }
+
     updateStack()
 
     stack.forEach((card) => {
-        card.addEventListener("click", () => {
-            const index = stack.indexOf(card)
-            if (index === 0) return
-
-            stack.splice(index, 1)
-            stack.unshift(card)
-
-            updateStack()
-
-            gsap.fromTo(
-                card,
-                { x: 120, rotation: 8, scale: 0.9 },
-                { x: 0, rotation: 0, scale: 1, duration: isReducedMotion ? 0 : 0.7, ease: "power3.out" }
-            )
-        })
+        card.addEventListener("click", () => bringToFront(card))
+        // Keyboard users tab through the "Ver detalle" buttons; show the card that holds the focused one
+        card.addEventListener("focusin", () => bringToFront(card))
     })
+
+    function renderTechnologies(technologies) {
+        modalTechnologies.replaceChildren(
+            ...technologies.map((technology) => {
+                const tag = document.createElement("span")
+                tag.className = "rounded-full bg-cyan-100 px-3 py-1 text-sm text-cyan-700"
+                tag.textContent = technology
+                return tag
+            })
+        )
+    }
+
+    function setLink(link, href, label) {
+        link.hidden = !href
+        link.href = href || "#"
+        link.setAttribute("aria-label", label)
+    }
 
     detailButtons.forEach((button) => {
         button.addEventListener("click", (event) => {
             event.stopPropagation();
+            if (isOpen) return
+            isOpen = true
 
-            const type = button.dataset.projectType;
-            const title = button.dataset.projectTitle;
-            const description = button.dataset.projectDescription;
-            const technologies =
-                button.dataset.projectTechnologies?.split(",") ?? [];
-            const github = button.dataset.projectGithub
-            const demo = button.dataset.projectDemo
+            const { projectType, projectTitle, projectDescription, projectTechnologies, projectGithub, projectDemo } = button.dataset
+            const title = projectTitle ?? ""
 
-            modalType.textContent = type ?? "";
-            modalTitle.textContent = title ?? "";
-            modalDescription.textContent = description ?? "";
-            modalGithub.href = github
-            modalDemo.href = demo
+            modalType.textContent = projectType ?? "";
+            modalTitle.textContent = title;
+            modalDescription.textContent = projectDescription ?? "";
+            renderTechnologies(projectTechnologies ? projectTechnologies.split(",") : [])
+            setLink(modalGithub, projectGithub, `Código de ${title} en GitHub (se abre en una pestaña nueva)`)
+            setLink(modalDemo, projectDemo, `Demo de ${title} (se abre en una pestaña nueva)`)
 
-            modalTechnologies.innerHTML = technologies
-                .map((technology) => `
-                    <span class="rounded-full bg-cyan-100 px-3 py-1 text-sm text-cyan-700">
-                        ${technology}
-                    </span>
-                `)
-                .join("");
-
+            gsap.killTweensOf(modalContent)
             modal.classList.remove("hidden");
             modal.classList.add("flex");
 
@@ -115,6 +130,8 @@ function projectAnimation() {
                 { opacity: 0, scale: 0.9, y: 20 },
                 { opacity: 1, scale: 1, y: 0, duration: isReducedMotion ? 0 : 0.4, ease: "power3.out" }
             );
+
+            a11y.activate(closeButton)
         });
     });
 
@@ -127,6 +144,11 @@ function projectAnimation() {
     });
 
     function closeModal() {
+        if (!isOpen) return
+        isOpen = false
+        a11y.deactivate()
+        gsap.killTweensOf(modalContent)
+
         gsap.to(modalContent, {
             opacity: 0,
             scale: 0.9,

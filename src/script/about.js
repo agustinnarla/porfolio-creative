@@ -1,4 +1,5 @@
 import gsap from "gsap"
+import { createModalA11y } from "./modal.js"
 
 const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
 const hasHover = window.matchMedia("(hover: hover)").matches
@@ -12,7 +13,10 @@ function aboutAnimation() {
     const $modalContent = document.querySelector("[data-trigger-about-modal-content]")
     const $modalClose = document.querySelector("[data-trigger-about-modal-close]")
 
-    if (!$about) return;
+    if (!$about || !$modalAbout) return;
+
+    const a11y = createModalA11y($modalAbout, { onClose: closeModal })
+    let isOpen = false
 
     gsap.set($bg, { opacity: 0 })
 
@@ -53,6 +57,10 @@ function aboutAnimation() {
     }
 
     function openModal() {
+        if (isOpen) return
+        isOpen = true
+        gsap.killTweensOf([$modalAbout, $modalContent])
+
         $modalAbout.classList.remove("hidden")
         $modalAbout.classList.add("flex")
 
@@ -72,10 +80,17 @@ function aboutAnimation() {
             duration: isReducedMotion ? 0 : 0.6,
             ease: "power2.in"
         })
+
+        a11y.activate($modalClose)
     }
 
     function closeModal() {
-        gsap.to($modalAbout, {
+        if (!isOpen) return
+        isOpen = false
+        a11y.deactivate()
+        gsap.killTweensOf([$modalAbout, $modalContent])
+
+        gsap.to($modalContent, {
             y: 50,
             scale: 0.9,
             opacity: 0,
@@ -83,7 +98,7 @@ function aboutAnimation() {
             ease: "power3.in"
         })
 
-        gsap.to($modalContent, {
+        gsap.to($modalAbout, {
             opacity: 0,
             duration: isReducedMotion ? 0 : 0.3,
             onComplete: () => {
@@ -96,6 +111,12 @@ function aboutAnimation() {
     }
 
     $about.addEventListener("click", openModal)
+    $about.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault()
+            openModal()
+        }
+    })
     $modalClose.addEventListener("click", closeModal)
     $modalBg.addEventListener("click", closeModal)
 }

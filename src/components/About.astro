@@ -1,8 +1,12 @@
 <section
     data-trigger-about
-    class="relative col-span-1 row-span-auto overflow-hidden rounded-xl border bg-white p-6 sm:col-span-2 sm:p-8 lg:col-span-4 lg:row-span-12 hover:cursor-pointer"
+    tabindex="0"
+    role="button"
+    aria-haspopup="dialog"
+    aria-label="Agustín Arla: ver más sobre mí"
+    class="relative col-span-1 row-span-auto overflow-hidden rounded-xl border bg-white p-6 sm:col-span-2 sm:p-8 lg:col-span-4 lg:row-span-12 hover:cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-700"
 >
-   <div data-trigger-bg class="absolute inset-0 bg-linear-to-br from-cyan-500 via-cyan-400 to-white-400">
+   <div data-trigger-bg class="absolute inset-0 bg-linear-to-br from-cyan-500 via-cyan-400 to-white">
    </div>
 
     <div class="relative z-10 flex h-full flex-col justify-between">
@@ -45,12 +49,18 @@
     </div>
 </section>
 
-<div class="fixed inset-0 z-9998 hidden items-center justify-center" data-trigger-about-modal>
+<div
+    class="fixed inset-0 z-9998 hidden items-center justify-center"
+    data-trigger-about-modal
+    role="dialog"
+    aria-modal="true"
+    aria-label="Sobre Agustín Arla"
+>
     <div class="absolute inset-0 bg-black/50 backdrop-blur-md" data-trigger-about-modal-bg>
     </div>
     <div class="relative z-10 w-[90%] max-w-3xl rounded-2xl bg-white p-6 sm:p-12" data-trigger-about-modal-content>
         <div class="flex justify-end">
-            <button class="absolute right-6 top-6 text-2xl transform-content hover:rotate-12 duration-200 cursor-pointer" data-trigger-about-modal-close>X</button>
+            <button type="button" aria-label="Cerrar" class="absolute right-6 top-6 text-2xl hover:rotate-12 duration-200 cursor-pointer" data-trigger-about-modal-close>×</button>
         </div>
 
         <img src="/images/agusblanco.webp" alt="Agustín Arla - Foto de perfil" class="w-24 h-24 rounded-full sm:w-32 sm:h-32" loading="lazy"/>

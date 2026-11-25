@@ -1,37 +1,205 @@
 @import "tailwindcss";
 
+@font-face {
+    font-family: "Roboto Condensed";
+    src: url("/fonts/RobotoCondensed-VariableFont_wght.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
 
 @font-face {
-  font-family: 'Roboto Condensed';
-  src: url('/fonts/RobotoCondensed-VariableFont_wght.ttf') 
-  format('truetype');
-  font-weight: 100 900;
-  font-style: normal;
+    font-family: "Story";
+    src: url("/fonts/StoryScript-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
 }
 
-@font-face {
-  font-family: 'Story';
-  src: url('/fonts/StoryScript-Regular.ttf') 
-  format('truetype');
-  font-weight: 100 900;
-  font-style: normal;
+@theme {
+    --font-sans: "Roboto Condensed", ui-sans-serif, system-ui, sans-serif;
+    --font-script: "Story", cursive;
+
+    --color-paper: #f4f2ec;
+    --color-card: #fbfaf7;
+    --color-ink: #141414;
+    --color-muted: #6a6862;
+    --color-line: rgb(20 20 20 / 0.12);
+    --color-accent: #06b6d4;
+    --color-accent-deep: #0e7490;
+    --color-accent-soft: #cffafe;
+
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-
-body{
-    margin:0;
-    font-family: 'Roboto Condensed', sans-serif;
-    background-color: #f8f8f6;
-    background-image: radial-gradient(#b8b8b8 1px, transparent 1px);
-    background-size: 24px 24px
+html {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
 }
 
-[data-trigger-about],
-[data-trigger-skills],
-[data-trigger-contact],
-[data-trigger-cv],
-[data-trigger-project] {
-    will-change: transform;
+body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background-color: var(--color-paper);
+    background-image: radial-gradient(rgb(20 20 20 / 0.16) 1px, transparent 1px);
+    background-size: 24px 24px;
+}
+
+::selection {
+    background: var(--color-accent);
+    color: var(--color-ink);
+}
+
+/* Grain overlay: adds texture without an image request */
+body::after {
+    content: "";
+    position: fixed;
+    inset: -50%;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Bento cards ---------- */
+
+.card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    border-radius: 1.5rem;
+    background: var(--color-card);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.8) inset, 0 1px 2px rgb(20 20 20 / 0.04);
+    transition: box-shadow 0.5s var(--ease-out-expo), border-color 0.5s var(--ease-out-expo);
+}
+
+/* Spotlight that follows the pointer (--x / --y are set from JS) */
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    background: radial-gradient(
+        420px circle at var(--x, 50%) var(--y, 50%),
+        rgb(6 182 212 / 0.14),
+        transparent 60%
+    );
+    transition: opacity 0.4s ease;
+}
+
+@media (hover: hover) {
+    .card:hover {
+        border-color: rgb(20 20 20 / 0.22);
+        box-shadow: 0 1px 0 rgb(255 255 255 / 0.8) inset, 0 24px 48px -24px rgb(20 20 20 / 0.25);
+    }
+    .card:hover::before {
+        opacity: 1;
+    }
+}
+
+.card-label {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+}
+
+.card-label .num {
+    font-family: var(--font-script);
+    font-size: 1.9rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--color-accent-deep);
+    line-height: 1;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    background: #fff;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.95rem;
+}
+
+.btn-round {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-line);
+    background: #fff;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.btn-round:hover {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-accent-deep);
+    outline-offset: 3px;
+}
+
+/* ---------- Dialogs ---------- */
+
+html:has(dialog[open]) {
+    overflow: hidden;
+}
+
+dialog.modal {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+}
+
+dialog.modal[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+dialog.modal::backdrop {
+    background: transparent;
+}
+
+/* ---------- Intro state ---------- */
+
+/* Cards start hidden only when JS runs; without JS everything stays visible */
+html.js [data-reveal] {
+    visibility: hidden;
+}
+
+/* ---------- Custom cursor ---------- */
+
+/* Dialogs live in the top layer, above any z-index: hide the custom cursor meanwhile */
+html:has(dialog[open]) [data-cursor-root] {
+    display: none !important;
+}
+
+@media (hover: none), (pointer: coarse) {
+    [data-cursor-root] {
+        display: none !important;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -44,3 +212,9 @@ body{
     }
 }
 
+/* SplitText masks clip at the line box; with tight leading that cuts accents (Í). Give them headroom. */
+[data-about-name] > div,
+[data-loader-title] > div {
+    padding-block: 0.18em 0.06em;
+    margin-block: -0.18em -0.06em;
+}

@@ -1,81 +1,158 @@
+---
+import { Icon } from "astro-icon/components"
+import { ArrowUpRight, X, FileText } from "@lucide/astro"
+
+const focus = ["Relevamiento", "Análisis funcional", "Desarrollo Full Stack", "Ciberseguridad"]
+---
+
 <section
-    data-trigger-about
-    tabindex="0"
-    role="button"
-    aria-haspopup="dialog"
-    aria-label="Agustín Arla: ver más sobre mí"
-    class="relative col-span-1 row-span-auto overflow-hidden rounded-xl border bg-white p-6 sm:col-span-2 sm:p-8 lg:col-span-4 lg:row-span-12 hover:cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cyan-700"
+    data-reveal
+    data-about
+    class="card col-span-1 flex min-h-[460px] flex-col p-6 sm:col-span-2 sm:p-8 lg:col-span-5 lg:row-span-4 lg:min-h-0"
 >
-   <div data-trigger-bg class="absolute inset-0 bg-linear-to-br from-cyan-500 via-cyan-400 to-white">
-   </div>
+    <div
+        data-about-blob
+        aria-hidden="true"
+        class="pointer-events-none absolute left-0 top-0 -z-10 h-[26rem] w-[26rem] rounded-full bg-[radial-gradient(circle,#22d3ee_0%,#a5f3fc_45%,transparent_70%)] opacity-50 blur-2xl"
+    >
+    </div>
 
-    <div class="relative z-10 flex h-full flex-col justify-between">
-        <span
-            data-trigger-number
-            class="text-3xl font-[Story] text-cyan-700 sm:text-4xl"
-        >
-            01.
-        </span>
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <p class="card-label"><span class="num">01.</span> Sobre mí</p>
 
-        <div data-trigger-info>
-            <h1 class="text-2xl font-medium tracking-tight sm:text-3xl">
-                Agustín Arla
-            </h1>
-
-            <p class="mt-3 text-lg text-gray-500 sm:text-xl">
-                Analista Funcional & Desarrollador Full Stack
-            </p>
-        </div>
-
-        <div
-            data-trigger-available
-            class="flex flex-col justify-end"
-        >
-            <span class="text-gray-500">
-                Córdoba, Argentina
+        <p class="chip text-sm">
+            <span class="relative flex h-2 w-2">
+                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-70"></span>
+                <span class="relative inline-flex h-2 w-2 rounded-full bg-accent-deep"></span>
             </span>
+            Full Stack Developer en Próximo
+        </p>
+    </div>
 
-            <div class="mt-1 flex items-center gap-2">
-                <span
-                    data-trigger-dot
-                    class="h-2 w-2 rounded-full bg-cyan-600"
-                ></span>
+    <div class="mt-auto pt-10">
+        <h1
+            data-about-name
+            class="text-[clamp(3.5rem,7.4vw,7.75rem)] font-semibold uppercase leading-[0.82] tracking-[-0.02em]"
+        >
+            <span class="block">Agustín</span>
+            <span class="block">Arla<span class="font-script normal-case text-accent-deep">.</span></span>
+        </h1>
 
-                <span>
-                    Full Stack Developer en Próximo
-                </span>
-            </div>
+        <p data-about-role class="mt-5 max-w-md text-lg leading-snug text-muted sm:text-xl">
+            <strong class="font-medium text-ink">Analista Funcional & Desarrollador Full Stack.</strong>{" "}
+            Traduzco necesidades de negocio en especificaciones claras y en producto que funciona.
+        </p>
+    </div>
+
+    <div class="mt-8 flex items-end justify-between gap-4">
+        <div class="flex items-center gap-3">
+            <img
+                src="/images/agusblanco.webp"
+                alt=""
+                width="48"
+                height="48"
+                class="h-12 w-12 rounded-full border border-line object-cover"
+                loading="lazy"
+            />
+            <span class="text-sm leading-tight text-muted">Córdoba,<br />Argentina</span>
         </div>
+
+        <button
+            type="button"
+            data-about-open
+            data-cursor="Leer"
+            aria-haspopup="dialog"
+            class="group flex cursor-pointer items-center gap-2 rounded-full bg-ink py-2 pl-5 pr-2 text-paper after:absolute after:inset-0 after:content-['']"
+        >
+            Más sobre mí
+            <span class="grid h-8 w-8 place-items-center rounded-full bg-accent text-ink transition-transform duration-500 group-hover:rotate-45">
+                <ArrowUpRight size={18} aria-hidden="true" />
+            </span>
+        </button>
     </div>
 </section>
 
-<div
-    class="fixed inset-0 z-9998 hidden items-center justify-center"
-    data-trigger-about-modal
-    role="dialog"
-    aria-modal="true"
-    aria-label="Sobre Agustín Arla"
->
-    <div class="absolute inset-0 bg-black/50 backdrop-blur-md" data-trigger-about-modal-bg>
-    </div>
-    <div class="relative z-10 w-[90%] max-w-3xl rounded-2xl bg-white p-6 sm:p-12" data-trigger-about-modal-content>
-        <div class="flex justify-end">
-            <button type="button" aria-label="Cerrar" class="absolute right-6 top-6 text-2xl hover:rotate-12 duration-200 cursor-pointer" data-trigger-about-modal-close>×</button>
+<dialog data-about-modal class="modal" aria-labelledby="about-modal-title">
+    <div data-modal-backdrop class="absolute inset-0 bg-ink/55 backdrop-blur-md"></div>
+
+    <div
+        data-modal-panel
+        class="relative m-4 max-h-[calc(100svh-2rem)] w-full max-w-4xl overflow-y-auto rounded-[1.75rem] bg-card p-6 sm:p-10"
+    >
+        <button
+            type="button"
+            data-modal-close
+            aria-label="Cerrar"
+            class="btn-round absolute right-5 top-5 z-10"
+        >
+            <X size={20} aria-hidden="true" />
+        </button>
+
+        <div class="grid gap-8 md:grid-cols-[220px_1fr] md:gap-10">
+            <div data-modal-stagger>
+                <img
+                    src="/images/agusblanco.webp"
+                    alt="Agustín Arla - Foto de perfil"
+                    width="440"
+                    height="440"
+                    class="aspect-square w-32 rounded-2xl object-cover md:w-full"
+                    loading="lazy"
+                />
+                <p class="mt-4 hidden text-sm text-muted md:block">Córdoba, Argentina</p>
+            </div>
+
+            <div>
+                <p data-modal-stagger class="card-label"><span class="num">01.</span> Sobre mí</p>
+                <h2
+                    id="about-modal-title"
+                    data-modal-stagger
+                    class="mt-3 text-4xl font-semibold uppercase leading-[0.9] tracking-tight sm:text-5xl"
+                >
+                    Agustín Arla
+                </h2>
+
+                <p data-modal-stagger class="mt-6 text-lg leading-relaxed text-muted">
+                    Analista de Sistemas con orientación funcional, con experiencia relevando requerimientos,
+                    participando en el análisis funcional y el diseño de soluciones para una plataforma de gestión
+                    académica de alumnos, docentes y preceptores.
+                </p>
+                <p data-modal-stagger class="mt-4 text-lg leading-relaxed text-muted">
+                    Combino visión de negocio con base técnica en desarrollo (React Native, Node.js, PostgreSQL), lo
+                    que me permite traducir necesidades funcionales en especificaciones claras y dialogar de igual a
+                    igual con equipos de desarrollo. Sumo formación en ciberseguridad, aportando una mirada adicional
+                    sobre riesgos y buenas prácticas.
+                </p>
+
+                <ul data-modal-stagger class="mt-6 flex flex-wrap gap-2">
+                    {focus.map((item) => <li class="chip text-sm">{item}</li>)}
+                </ul>
+
+                <div data-modal-stagger class="mt-8 flex flex-wrap gap-3">
+                    <a
+                        href="https://www.linkedin.com/in/agustinarla/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-2 rounded-full bg-ink px-5 py-3 text-paper transition-colors hover:bg-accent-deep"
+                    >
+                        <Icon name="simple-icons:linkedin" aria-hidden="true" size={16} />
+                        LinkedIn<span class="sr-only"> (se abre en una pestaña nueva)</span>
+                    </a>
+                    <a
+                        href="/images/CV_Agustin_Arla_Analista_Funcional.docx.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-2 rounded-full border border-line px-5 py-3 transition-colors hover:border-ink"
+                    >
+                        <FileText size={16} aria-hidden="true" />
+                        Ver CV<span class="sr-only"> (PDF, se abre en una pestaña nueva)</span>
+                    </a>
+                </div>
+            </div>
         </div>
-
-        <img src="/images/agusblanco.webp" alt="Agustín Arla - Foto de perfil" class="w-24 h-24 rounded-full sm:w-32 sm:h-32" loading="lazy"/>
-
-        <p class="mt-6 max-w-2xl text-lg text-gray-500 sm:text-xl">
-            Analista de Sistemas con orientación funcional, con experiencia relevando requerimientos, participando en el análisis funcional y el diseño de soluciones para una plataforma de gestión académica de alumnos, docentes y preceptores. 
-        </p>
-        <span class="mt-6 max-w-2xl text-lg text-gray-500 sm:text-xl">Combino visión de negocio con base técnica en desarrollo (React Native, Node.js, PostgreSQL), lo que me permite traducir necesidades funcionales en especificaciones claras y dialogar de igual a igual con equipos de desarrollo. Sumo formación en ciberseguridad, aportando una mirada adicional sobre riesgos y buenas prácticas. </span>
     </div>
-</div>
-
-
-
+</dialog>
 
 <script>
-    import aboutAnimation from "../script/about";
+    import aboutAnimation from "../script/about.js"
     aboutAnimation()
 </script>

@@ -1,30 +1,42 @@
 ---
 import Layout from "../layout/Layout.astro"
 import Loading from "../components/Loading.astro"
+import Cursor from "../components/Cursor.astro"
 import About from "../components/About.astro"
 import Contact from "../components/Contact.astro"
 import Project from "../components/Project.astro"
 import Skills from "../components/Skills.astro"
 import CV from "../components/CV.astro"
----
 
+const year = new Date().getFullYear()
+---
 
 <Layout>
     <Loading />
+    <Cursor />
 
-    <div
-        data-trigger-main
-        class="flex min-h-screen items-center px-4 py-6 sm:px-6 lg:px-8"
-    >
+    <div class="mx-auto flex min-h-svh w-full max-w-[1440px] flex-col px-4 py-4 sm:px-6 lg:px-8 lg:py-5">
+        <header data-reveal class="mb-4 flex items-center justify-between text-sm lg:mb-5">
+            <a href="/" class="flex items-center gap-3 rounded-full" aria-label="Agustín Arla, inicio">
+                <img src="/images/logoAgus.webp" alt="" width="36" height="36" class="h-9 w-9 rounded-full border border-line bg-white object-contain p-1" />
+                <span class="font-medium tracking-wide uppercase">Agustín Arla</span>
+            </a>
+
+            <div class="flex items-center gap-5 text-muted">
+                <span class="hidden sm:inline">Portfolio © {year}</span>
+                <span class="flex items-center gap-2">
+                    <span class="hidden sm:inline">Córdoba, AR</span>
+                    <time data-clock class="tabular-nums text-ink">--:--</time>
+                </span>
+            </div>
+        </header>
+
         <main
             class="
-                mx-auto grid w-full max-w-7xl gap-4
-                grid-cols-1
-                sm:grid-cols-2
-                lg:grid-cols-12 
-				lg:grid-rows-12 
-				lg:gap-6
-                lg:min-h-[800px]
+                grid w-full flex-1 gap-3 grid-cols-1
+                sm:grid-cols-2 sm:gap-4
+                lg:grid-cols-12 lg:grid-rows-[repeat(6,minmax(0,1fr))]
+                lg:h-[max(720px,calc(100svh-7.5rem))] lg:flex-none
             "
         >
             <About />
@@ -33,6 +45,28 @@ import CV from "../components/CV.astro"
             <Contact />
             <CV />
         </main>
+
+        <footer data-reveal class="mt-4 flex flex-wrap items-center justify-between gap-2 text-xs text-muted lg:mt-5">
+            <span>Diseñado y desarrollado por Agustín Arla</span>
+            <span>Astro · Tailwind · GSAP</span>
+        </footer>
     </div>
 </Layout>
 
+<script>
+    const $clock = document.querySelector<HTMLTimeElement>("[data-clock]")
+    if ($clock) {
+        const fmt = new Intl.DateTimeFormat("es-AR", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+            timeZone: "America/Argentina/Cordoba",
+        })
+        const tick = () => {
+            $clock.textContent = fmt.format(new Date())
+            $clock.dateTime = new Date().toISOString()
+        }
+        tick()
+        setInterval(tick, 15_000)
+    }
+</script>

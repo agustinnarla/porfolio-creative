@@ -1,64 +1,68 @@
 ---
-import { Icon } from "astro-icon/components";
+import { Icon } from "astro-icon/components"
 
-const skills = [
-    {
-        name: "Astro",
-        icon: "simple-icons:astro"
-    },
-    {
-        name: "React Native",
-        icon: "simple-icons:react"
-    },
-    {
-        name: "Node.js",
-        icon: "simple-icons:nodedotjs"
-    },
-    {
-        name: "Tailwind CSS",
-        icon: "simple-icons:tailwindcss"
-    },
-    {
-        name: "JavaScript",
-        icon: "simple-icons:javascript"
-    },
-    {
-        name: "PostgreSQL",
-        icon: "simple-icons:postgresql"
-    }
-];
+const rows = [
+    [
+        { name: "React", icon: "simple-icons:react" },
+        { name: "React Native", icon: "simple-icons:react" },
+        { name: "TypeScript", icon: "simple-icons:typescript" },
+        { name: "JavaScript", icon: "simple-icons:javascript" },
+        { name: "Astro", icon: "simple-icons:astro" },
+        { name: "Expo", icon: "simple-icons:expo" },
+    ],
+    [
+        { name: "Node.js", icon: "simple-icons:nodedotjs" },
+        { name: "Express", icon: "simple-icons:express" },
+        { name: "PostgreSQL", icon: "simple-icons:postgresql" },
+        { name: "Supabase", icon: "simple-icons:supabase" },
+        { name: "Tailwind CSS", icon: "simple-icons:tailwindcss" },
+        { name: "GSAP", icon: "simple-icons:greensock" },
+    ],
+]
 ---
 
 <section
-   data-trigger-skills
-    class="col-span-1 row-span-auto rounded-xl border bg-white p-6 sm:col-span-2 sm:p-8 lg:col-span-4 lg:row-span-6"
+    data-reveal
+    data-skills
+    class="card col-span-1 flex min-h-[240px] flex-col py-6 sm:py-7 lg:col-span-4 lg:row-span-2 lg:min-h-0"
 >
-    <div class="flex h-full flex-col">
-        <span class="text-3xl font-[Story] text-cyan-700 sm:text-4xl">
-            03.
-        </span>
+    <div class="flex items-baseline justify-between px-6 sm:px-7">
+        <h2 class="card-label"><span class="num">03.</span> Stack</h2>
+        <span class="text-xs uppercase tracking-[0.14em] text-muted">Herramientas</span>
+    </div>
 
-        <div class="mt-auto grid grid-cols-2 gap-3">
-            {
-                skills.map((skill) => (
-                    <div class="flex items-center gap-2 rounded-3xl border p-2">
-                        <Icon
-                            name={skill.icon}
-                            aria-hidden="true"
-                            class="h-5 w-5"
-                        />
+    <p class="mt-auto px-6 pt-6 text-[clamp(1.6rem,2.2vw,2.1rem)] font-semibold uppercase leading-[0.95] tracking-tight sm:px-7">
+        Front, back <span class="font-script normal-case text-accent-deep">&</span> mobile
+    </p>
 
-                        <span>
-                            {skill.name}
-                        </span>
-                    </div>
-                ))
-            }
-        </div>
+    <ul class="sr-only">
+        {rows.flat().map((skill) => <li>{skill.name}</li>)}
+    </ul>
+
+    <div
+        aria-hidden="true"
+        class="mt-4 flex flex-col gap-2.5 [mask-image:linear-gradient(90deg,transparent,#000_12%,#000_88%,transparent)]"
+    >
+        {
+            rows.map((row, rowIndex) => (
+                <div data-marquee data-direction={rowIndex % 2 ? "1" : "-1"} class="flex w-max">
+                    {[0, 1].map(() => (
+                        <div data-marquee-track class="flex shrink-0 gap-2.5 pr-2.5">
+                            {row.map((skill) => (
+                                <span data-skill class="chip">
+                                    <Icon name={skill.icon} class="h-4 w-4" />
+                                    {skill.name}
+                                </span>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            ))
+        }
     </div>
 </section>
 
 <script>
-    import skillsLoading from "../script/skills.js";
-    skillsLoading()
+    import skillsAnimation from "../script/skills.js"
+    skillsAnimation()
 </script>

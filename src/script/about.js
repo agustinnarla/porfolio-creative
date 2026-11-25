@@ -1,124 +1,74 @@
 import gsap from "gsap"
-import { createModalA11y } from "./modal.js"
+import { SplitText } from "gsap/SplitText"
+import { createModal } from "./modal.js"
+import { reduced, hasHover, initCard, onIntroDone } from "./motion.js"
 
-const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-const hasHover = window.matchMedia("(hover: hover)").matches
+gsap.registerPlugin(SplitText)
 
 function aboutAnimation() {
-    const $about = document.querySelector("[data-trigger-about]")
-    const $bg = document.querySelector("[data-trigger-bg]")
+    const $about = document.querySelector("[data-about]")
+    const $blob = document.querySelector("[data-about-blob]")
+    const $name = document.querySelector("[data-about-name]")
+    const $role = document.querySelector("[data-about-role]")
+    const $open = document.querySelector("[data-about-open]")
+    const $modal = document.querySelector("[data-about-modal]")
 
-    const $modalAbout = document.querySelector("[data-trigger-about-modal]")
-    const $modalBg = document.querySelector("[data-trigger-about-modal-bg]")
-    const $modalContent = document.querySelector("[data-trigger-about-modal-content]")
-    const $modalClose = document.querySelector("[data-trigger-about-modal-close]")
+    if (!$about) return
 
-    if (!$about || !$modalAbout) return;
+    initCard($about, { max: 2.5 })
 
-    const a11y = createModalA11y($modalAbout, { onClose: closeModal })
-    let isOpen = false
+    if ($modal && $open) {
+        const modal = createModal($modal)
+        $open.addEventListener("click", modal.open)
+    }
 
-    gsap.set($bg, { opacity: 0 })
+    // Name: letters rise from a mask once the intro hands over
+    if (!reduced && $name) {
+        const split = SplitText.create($name, { type: "chars,lines", mask: "lines" })
+        gsap.set(split.chars, { yPercent: 110 })
+        gsap.set($role, { autoAlpha: 0, y: 20 })
 
-    if (hasHover) {
-        $about.addEventListener("mouseenter", () => {
-            gsap.killTweensOf($about)
-            gsap.killTweensOf($bg)
-            gsap.to($about, {
-                scale: 1.05,
-                duration: isReducedMotion ? 0 : 0.4,
-                y: -10,
-                x: -10,
-                ease: "power2.out"
-            })
-            gsap.to($bg, {
-                opacity: 1,
-                duration: isReducedMotion ? 0 : 0.5,
-                ease: "power2.in"
-            })
-        })
-
-        $about.addEventListener("mouseleave", () => {
-            gsap.killTweensOf($about)
-            gsap.killTweensOf($bg)
-            gsap.to($about, {
-                scale: 1.00,
-                y: 0,
-                x: 0,
-                duration: isReducedMotion ? 0 : 0.5,
-                ease: "power2.out"
-            })
-            gsap.to($bg, {
-                opacity: 0,
-                duration: isReducedMotion ? 0 : 0.5,
-                ease: "power2.in"
-            })
+        onIntroDone(() => {
+            gsap.timeline({ delay: 0.25 })
+                .to(split.chars, { yPercent: 0, duration: 1.2, stagger: 0.04, ease: "expo.out" })
+                .to($role, { autoAlpha: 1, y: 0, duration: 1, ease: "expo.out" }, "-=0.9")
+                .add(() => split.revert())
         })
     }
 
-    function openModal() {
-        if (isOpen) return
-        isOpen = true
-        gsap.killTweensOf([$modalAbout, $modalContent])
+    if (!$blob || reduced) return
 
-        $modalAbout.classList.remove("hidden")
-        $modalAbout.classList.add("flex")
+    // Ambient drift; the pointer takes over while hovering
+    const rect = () => $about.getBoundingClientRect()
+    gsap.set($blob, { xPercent: -50, yPercent: -50, x: rect().width * 0.85, y: rect().height * 0.15 })
 
-        gsap.fromTo($modalAbout, { opacity: 0 }, {
-            opacity: 1,
-            duration: isReducedMotion ? 0 : 0.4
-        })
-
-        gsap.fromTo($modalContent, {
-            y: 80,
-            scale: 0.6,
-            opacity: 0,
-        }, {
-            y: 0,
-            scale: 1,
-            opacity: 1,
-            duration: isReducedMotion ? 0 : 0.6,
-            ease: "power2.in"
-        })
-
-        a11y.activate($modalClose)
-    }
-
-    function closeModal() {
-        if (!isOpen) return
-        isOpen = false
-        a11y.deactivate()
-        gsap.killTweensOf([$modalAbout, $modalContent])
-
-        gsap.to($modalContent, {
-            y: 50,
-            scale: 0.9,
-            opacity: 0,
-            duration: isReducedMotion ? 0 : 0.3,
-            ease: "power3.in"
-        })
-
-        gsap.to($modalAbout, {
-            opacity: 0,
-            duration: isReducedMotion ? 0 : 0.3,
-            onComplete: () => {
-                $modalAbout.classList.add("hidden")
-                $modalAbout.classList.remove("flex")
-                gsap.set($modalAbout, { clearProps: "all" })
-                gsap.set($modalContent, { clearProps: "all" })
-            }
-        })
-    }
-
-    $about.addEventListener("click", openModal)
-    $about.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault()
-            openModal()
-        }
+    const drift = gsap.to($blob, {
+        x: () => rect().width * 0.65,
+        y: () => rect().height * 0.4,
+        scale: 1.25,
+        duration: 6,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
     })
-    $modalClose.addEventListener("click", closeModal)
-    $modalBg.addEventListener("click", closeModal)
+
+    if (!hasHover) return
+
+    const blobX = gsap.quickTo($blob, "x", { duration: 1.2, ease: "power3" })
+    const blobY = gsap.quickTo($blob, "y", { duration: 1.2, ease: "power3" })
+
+    $about.addEventListener("pointerenter", () => {
+        drift.pause()
+        gsap.to($blob, { opacity: 0.9, scale: 1.1, duration: 0.8, ease: "power2.out" })
+    })
+    $about.addEventListener("pointermove", (event) => {
+        const r = rect()
+        blobX(event.clientX - r.left)
+        blobY(event.clientY - r.top)
+    })
+    $about.addEventListener("pointerleave", () => {
+        gsap.to($blob, { opacity: 0.5, scale: 1, duration: 0.8, ease: "power2.out", onComplete: () => drift.invalidate().restart() })
+    })
 }
 
 export default aboutAnimation

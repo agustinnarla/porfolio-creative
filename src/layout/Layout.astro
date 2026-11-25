@@ -31,7 +31,12 @@ const siteImage = new URL("/images/agusblanco.webp", siteUrl).href
 		<meta name="twitter:description" content={siteDescription} />
 		<meta name="twitter:image" content={siteImage} />
         
+		<meta name="theme-color" content="#f4f2ec" />
 		<title>{siteTitle}</title>
+
+		<link rel="preload" href="/fonts/RobotoCondensed-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin />
+		<script is:inline>document.documentElement.classList.add("js")</script>
+		<noscript><style>[data-loader], [data-cursor-root] { display: none !important; }</style></noscript>
 
 		<script type="application/ld+json">
 			{
@@ -54,8 +59,11 @@ const siteImage = new URL("/images/agusblanco.webp", siteUrl).href
 					"Node.js",
 					"PostgreSQL",
 					"JavaScript",
+					"TypeScript",
+					"Supabase",
 					"Tailwind CSS",
 					"Astro",
+					"GSAP",
 					"Ciberseguridad"
 				]
 			}

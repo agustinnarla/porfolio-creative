@@ -1,21 +1,28 @@
-import gsap from "gsap";
-
-const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-const hasHover = window.matchMedia("(hover: hover)").matches
+import gsap from "gsap"
+import { reduced, hasHover, initCard } from "./motion.js"
 
 function cvAnimation() {
-    const $cv = document.querySelector("[data-trigger-cv]");
-    if (!$cv || !hasHover) return;
+    const $cv = document.querySelector("[data-cv]")
+    if (!$cv) return
 
-    $cv.addEventListener("mouseenter", () => {
-        gsap.killTweensOf($cv);
-        gsap.to($cv, { scale: 1.05, duration: isReducedMotion ? 0 : 0.4, y: 20, ease: "power2.out" });
-    });
+    initCard($cv)
 
-    $cv.addEventListener("mouseleave", () => {
-        gsap.killTweensOf($cv);
-        gsap.to($cv, { scale: 1, y: 0, duration: isReducedMotion ? 0 : 0.4, ease: "power2.out" });
-    });
+    const $front = $cv.querySelector("[data-cv-paper-front]")
+    const $back = $cv.querySelector("[data-cv-paper-back]")
+    if (!$front || !$back || reduced) return
+
+    gsap.set($front, { rotation: 6, transformOrigin: "50% 100%" })
+    gsap.set($back, { rotation: -4, transformOrigin: "50% 100%" })
+
+    if (!hasHover) return
+
+    const hover = gsap
+        .timeline({ paused: true, defaults: { duration: 0.7, ease: "expo.out" } })
+        .to($front, { rotation: -2, y: -36, scale: 1.04 })
+        .to($back, { rotation: -10, x: -18, y: -14 }, "<")
+
+    $cv.addEventListener("pointerenter", () => hover.play())
+    $cv.addEventListener("pointerleave", () => hover.reverse())
 }
 
 export default cvAnimation

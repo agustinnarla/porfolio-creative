@@ -1,58 +1,62 @@
 ---
-import { Icon } from "astro-icon/components";
-import { Mail } from '@lucide/astro'
+import { Icon } from "astro-icon/components"
+import { Copy, Check } from "@lucide/astro"
 ---
+
 <section
-    data-trigger-contact
-    class="relative col-span-1 row-span-auto rounded-xl border bg-white p-6 sm:col-span-2 sm:p-8 lg:col-span-4 lg:row-span-3"
+    data-reveal
+    data-contact
+    class="card col-span-1 flex min-h-[240px] flex-col p-6 sm:p-7 lg:col-span-4 lg:row-span-2 lg:min-h-0"
 >
-    <span class="text-3xl font-[Story] text-cyan-700 sm:text-4xl">
-        04.
-    </span>
-    <div class="flex flex-row items-center justify-end gap-6 sm:gap-8">
-        <a href="https://github.com/agustinnarla" target="_blank" rel="noopener noreferrer" aria-label="GitHub (se abre en una pestaña nueva)" class="p-2 -m-2 rounded-lg">
-            <Icon name="simple-icons:github" aria-hidden="true" size={33} class="transition-colors hover:text-cyan-950 duration-500"/>
-        </a>
-        <a href="https://www.linkedin.com/in/agustinarla/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (se abre en una pestaña nueva)" class="p-2 -m-2 rounded-lg">
-            <Icon name="simple-icons:linkedin" aria-hidden="true" size={33} class="transition-colors hover:text-cyan-950 duration-500"/>
-        </a>
-        <button data-trigger-mail
-            data-copy-email
+    <h2 class="card-label"><span class="num">04.</span> Contacto</h2>
+
+    <p class="mt-auto text-[clamp(2.25rem,3.4vw,3.25rem)] font-semibold uppercase leading-[0.9] tracking-tight">
+        ¿Hablamos<span class="font-script normal-case text-accent-deep">?</span>
+    </p>
+
+    <div class="mt-5 flex flex-wrap items-center gap-2.5">
+        <button
             type="button"
-            aria-label="Copiar email"
-            class="cursor-pointer p-2 -m-2 rounded-lg">
-            <Mail size={33} class="transition-colors hover:text-cyan-950 duration-500"/>
+            data-copy-email
+            data-cursor="Copiar"
+            class="relative flex h-11 cursor-pointer items-center gap-2 overflow-hidden rounded-full bg-ink pl-4 pr-5 text-paper transition-colors hover:bg-accent-deep"
+        >
+            <span data-copy-default class="flex items-center gap-2">
+                <Copy size={16} aria-hidden="true" />
+                Copiar email
+            </span>
+            <span data-copy-done class="absolute inset-0 flex items-center justify-center gap-2 opacity-0" aria-hidden="true">
+                <Check size={16} aria-hidden="true" />
+                ¡Copiado!
+            </span>
         </button>
+
+        <a
+            data-magnetic
+            href="https://github.com/agustinnarla"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub (se abre en una pestaña nueva)"
+            class="btn-round h-11 w-11"
+        >
+            <Icon name="simple-icons:github" aria-hidden="true" size={18} />
+        </a>
+        <a
+            data-magnetic
+            href="https://www.linkedin.com/in/agustinarla/"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn (se abre en una pestaña nueva)"
+            class="btn-round h-11 w-11"
+        >
+            <Icon name="simple-icons:linkedin" aria-hidden="true" size={18} />
+        </a>
     </div>
-    <p
-        data-copy-status
-        role="status"
-        aria-live="polite"
-        class="absolute bottom-3 right-6 text-sm text-cyan-700"
-    ></p>
+
+    <p data-copy-status role="status" aria-live="polite" class="sr-only"></p>
 </section>
 
 <script>
-		import contactAnimation from "../script/contact";
-		contactAnimation()
-
-        const $mail = document.querySelector("[data-copy-email]")
-        const $status = document.querySelector("[data-copy-status]")
-        let statusTimer: ReturnType<typeof setTimeout> | undefined
-
-        $mail?.addEventListener("click", async () => {
-            const email = "arlaagustin1@gmail.com"
-
-            try {
-                await navigator.clipboard.writeText(email)
-                if ($status) {
-                    $status.textContent = "Email copiado"
-                    clearTimeout(statusTimer)
-                    statusTimer = setTimeout(() => ($status.textContent = ""), 2500)
-                }
-            } catch {
-                // Clipboard unavailable (permissions / insecure context): open the mail client instead
-                window.location.href = `mailto:${email}`
-            }
-        })
+    import contactAnimation from "../script/contact.js"
+    contactAnimation()
 </script>

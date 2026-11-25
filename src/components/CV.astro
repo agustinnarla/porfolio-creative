@@ -1,36 +1,46 @@
-<section
-  data-trigger-cv
-  class="relative col-span-1 row-span-auto overflow-hidden rounded-xl border bg-white p-4 sm:col-span-2 sm:p-6 lg:col-span-4 lg:row-span-4"
->
+---
+import { ArrowDown } from "@lucide/astro"
+---
 
-  <span class="relative z-20 text-3xl font-[Story] text-cyan-700 sm:text-4xl">
-    05.
-  </span>
-
-    <a
+<a
+    data-reveal
+    data-cv
+    data-cursor="Ver CV"
     href="/images/CV_Agustin_Arla_Analista_Funcional.docx.pdf"
     target="_blank"
     rel="noopener noreferrer"
-    class="group absolute z-10 h-40 w-[90%] overflow-hidden rounded-xl bg-white shadow-lg sm:h-54"
-  >
-    <img
-      src="/images/cv.png"
-      alt="Vista previa del CV de Agustín Arla"
-      class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-      loading="lazy"
-    />
+    class="card group col-span-1 flex min-h-[240px] flex-col p-6 sm:col-span-2 sm:p-7 lg:col-span-4 lg:row-span-2 lg:min-h-0"
+>
+    <p class="card-label"><span class="num">05.</span> CV</p>
 
-    <div
-      class="absolute inset-0 flex items-center justify-center bg-cyan-950/0
-            transition-all duration-500 group-hover:bg-cyan-950/30"
-    >
+    <div class="relative z-10 mt-auto max-w-[60%]">
+        <p class="text-[clamp(2rem,2.7vw,2.75rem)] font-semibold uppercase leading-[0.9] tracking-tight">
+            Currículum
+        </p>
+        <p class="mt-3 flex items-center gap-2 text-sm text-muted">
+            <span class="grid h-7 w-7 place-items-center rounded-full bg-accent text-ink transition-transform duration-500 group-hover:translate-y-0.5">
+                <ArrowDown size={15} aria-hidden="true" />
+            </span>
+            PDF · Analista Funcional
+        </p>
+        <span class="sr-only">(se abre en una pestaña nueva)</span>
     </div>
-  </a>
-</section>
+
+    <div data-cv-paper aria-hidden="true" class="absolute -bottom-16 right-5 w-[32%] max-w-[190px] sm:right-7">
+        <div data-cv-paper-back class="absolute inset-0 rounded-lg border border-line bg-white"></div>
+        <img
+            data-cv-paper-front
+            src="/images/cv.png"
+            alt=""
+            width="444"
+            height="496"
+            class="relative w-full rounded-lg border border-line bg-white shadow-[0_20px_40px_-20px_rgba(20,20,20,0.4)]"
+            loading="lazy"
+        />
+    </div>
+</a>
 
 <script>
-  import cvAnimation from "../script/cv"
-  cvAnimation()
-
-
+    import cvAnimation from "../script/cv.js"
+    cvAnimation()
 </script>

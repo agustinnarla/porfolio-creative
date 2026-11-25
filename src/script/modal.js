@@ -1,53 +1,66 @@
-const FOCUSABLE =
-    'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])'
+import gsap from "gsap"
+import { d } from "./motion.js"
 
 /**
- * Keyboard support for a modal: Escape closes it, Tab stays inside it,
- * and focus goes back to the element that opened it.
+ * Animated wrapper around a native <dialog>.
+ * The browser handles the focus trap, the top layer and returning focus;
+ * this adds the GSAP enter/leave and closes on Escape or backdrop click.
+ *
+ * Markup: dialog.modal > [data-modal-backdrop] + [data-modal-panel],
+ * [data-modal-close] buttons and optional [data-modal-stagger] children.
  */
-export function createModalA11y(modal, { onClose }) {
-    let lastFocused = null
+export function createModal(dialog, { onClose } = {}) {
+    const panel = dialog.querySelector("[data-modal-panel]")
+    const backdrop = dialog.querySelector("[data-modal-backdrop]")
+    let closing = false
 
-    function getFocusable() {
-        return [...modal.querySelectorAll(FOCUSABLE)].filter(
-            (el) => !el.hidden && el.getClientRects().length > 0
-        )
+    const items = () => panel.querySelectorAll("[data-modal-stagger]")
+
+    function open() {
+        if (dialog.open) return
+        closing = false
+        dialog.showModal()
+        gsap.killTweensOf([panel, backdrop, ...items()])
+
+        gsap.timeline()
+            .fromTo(backdrop, { autoAlpha: 0 }, { autoAlpha: 1, duration: d(0.4), ease: "power2.out" })
+            .fromTo(
+                panel,
+                { y: 80, autoAlpha: 0, scale: 0.94, rotation: -1.5 },
+                { y: 0, autoAlpha: 1, scale: 1, rotation: 0, duration: d(0.9), ease: "expo.out" },
+                "<0.05"
+            )
+            .fromTo(
+                items(),
+                { y: 24, autoAlpha: 0 },
+                { y: 0, autoAlpha: 1, duration: d(0.7), stagger: 0.05, ease: "expo.out" },
+                "<0.15"
+            )
     }
 
-    function onKeydown(event) {
-        if (event.key === "Escape") {
-            event.preventDefault()
-            onClose()
-            return
-        }
+    function close() {
+        if (!dialog.open || closing) return
+        closing = true
+        gsap.killTweensOf([panel, backdrop, ...items()])
 
-        if (event.key !== "Tab") return
-
-        const items = getFocusable()
-        if (!items.length) return
-
-        const first = items[0]
-        const last = items[items.length - 1]
-
-        if (event.shiftKey && document.activeElement === first) {
-            event.preventDefault()
-            last.focus()
-        } else if (!event.shiftKey && document.activeElement === last) {
-            event.preventDefault()
-            first.focus()
-        }
+        gsap.timeline({
+            onComplete() {
+                dialog.close()
+                closing = false
+                gsap.set([panel, backdrop, ...items()], { clearProps: "all" })
+                onClose?.()
+            },
+        })
+            .to(panel, { y: 50, autoAlpha: 0, scale: 0.97, duration: d(0.35), ease: "power3.in" })
+            .to(backdrop, { autoAlpha: 0, duration: d(0.3) }, "<0.1")
     }
 
-    return {
-        activate(initialFocus) {
-            lastFocused = document.activeElement
-            document.addEventListener("keydown", onKeydown)
-            ;(initialFocus ?? getFocusable()[0])?.focus()
-        },
-        deactivate() {
-            document.removeEventListener("keydown", onKeydown)
-            lastFocused?.focus?.()
-            lastFocused = null
-        },
-    }
+    dialog.addEventListener("cancel", (event) => {
+        event.preventDefault()
+        close()
+    })
+    backdrop?.addEventListener("click", close)
+    dialog.querySelectorAll("[data-modal-close]").forEach((button) => button.addEventListener("click", close))
+
+    return { open, close }
 }
